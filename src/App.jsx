@@ -68,10 +68,12 @@ function App() {
   })
 
   return (
-    <>
+    <main className="w-full flex flex-col justify-center items-center">
         <h1>{totalCorrect} / {totalPairs}</h1>
-        {tilesArray}
-    </>
+        <section className="w-5/6 bg-slate-300 grid grid-cols-6 grid-rows-3 gap-8 p-8">
+            {tilesArray}
+        </section>
+    </main>
   )
 }
 
