@@ -1,19 +1,27 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Tile from "./components/Tile.jsx";
 import { colorsArray, duplicateArray, shuffleArray, generateRandomId } from "./utils/utils.js";
 
 function App() {
-  const [tiles, setTiles] = useState(() => {
-      const shuffledColorsArr = shuffleArray(duplicateArray(colorsArray))
-      return shuffledColorsArr.map(color => {
-          return {
-            id: generateRandomId(),
-            color: color,
-            isFlipped: false,
-            isCorrect: false
-          }
-      })
-  })
+    const [tiles, setTiles] = useState([])
+    const [difficulty, setDifficulty] = useState(3);
+
+    const generateTiles = (diff) => {
+        const shuffledColorsArr = shuffleArray(duplicateArray(colorsArray.slice(0, diff)))
+        return shuffledColorsArr.map(color => {
+            return {
+                id: generateRandomId(),
+                color: color,
+                isFlipped: false,
+                isCorrect: false
+            }
+        })
+    }
+
+    useEffect(() => {
+        setTiles(generateTiles(difficulty))
+    }, [difficulty])
+
   const isGameWon = tiles.every(tile => tile.isCorrect === true)
   const totalCorrect = tiles.filter(tile => tile.isCorrect === true).length / 2
   const totalPairs = tiles.length / 2
@@ -56,6 +64,10 @@ function App() {
         })
   }
 
+  const handleDifficultyChange = (change) => {
+        setDifficulty(change)
+  }
+
   const tilesArray = tiles.map(({id, color, isFlipped, isCorrect}) => {
         return (<Tile
                     key={id}
@@ -68,12 +80,16 @@ function App() {
   })
 
   return (
-    <main className="w-full flex flex-col justify-center items-center">
-        <h1>{totalCorrect} / {totalPairs}</h1>
-        <section className="w-5/6 bg-slate-300 grid grid-cols-6 grid-rows-3 gap-8 p-8">
-            {tilesArray}
-        </section>
-    </main>
+      <main className="w-full flex flex-col justify-center items-center">
+          <h1>{totalCorrect} / {totalPairs}</h1>
+          {difficulty}
+          <button onClick={() => handleDifficultyChange(3)}>Easy</button>
+          <button onClick={() => handleDifficultyChange(6)}>Medium</button>
+          <button onClick={() => handleDifficultyChange(9)}>Hard</button>
+          <section className="w-5/6 bg-slate-300 grid grid-cols-6 grid-rows-3 gap-8 p-8">
+              {tilesArray}
+          </section>
+      </main>
   )
 }
 
