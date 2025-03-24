@@ -1,13 +1,15 @@
-import {useEffect, useState} from 'react'
+import { useEffect, useState } from 'react'
 import Tile from "./components/Tile.jsx";
 import DifficultyButton from "./components/DifficultyButton.jsx"
 import ResetButton from "./components/ResetButton.jsx";
 import {colorsArray, duplicateArray, shuffleArray, generateRandomId} from "./utils/utils.js";
 import Confetti from 'react-confetti'
+import { useWindowSize } from "react-use";
 
 function App() {
     const [tiles, setTiles] = useState([])
     const [difficulty, setDifficulty] = useState(3);
+    const {height, width} = useWindowSize()
 
     const generateTiles = (diff) => {
         const shuffledColorsArr = shuffleArray(duplicateArray(colorsArray.slice(0, diff)))
@@ -89,15 +91,35 @@ function App() {
     })
 
     return (
-        <main className="w-full flex flex-col justify-center items-center">
-            {isGameWon && <Confetti/>}
-            <h1>{totalCorrect} / {totalPairs}</h1>
-            <DifficultyButton onClick={handleDifficultyChange} difficultyLevel={3} difficulty={difficulty}>Easy</DifficultyButton>
-            <DifficultyButton onClick={handleDifficultyChange} difficultyLevel={6} difficulty={difficulty}>Medium</DifficultyButton>
-            <DifficultyButton onClick={handleDifficultyChange} difficultyLevel={9} difficulty={difficulty}>Hard</DifficultyButton>
-            <ResetButton onClick={handleGameReset} isGameWon={isGameWon}/>
-            <section className="w-5/6 bg-slate-300 grid grid-cols-6 grid-rows-3 gap-8 p-8">
-                {tilesArray}
+        <main className="w-full flex justify-center py-8 font-sans">
+            <section className="w-full max-w-3xl flex flex-col justify-center items-center gap-6">
+                {isGameWon && <Confetti width={width} height={height}/>}
+                <div className="w-full flex justify-between px-8 py-4 shadow-xl rounded-2xl gap-4">
+                    <div className="flex flex-col flex-grow max-w-xs">
+                        <h1 className="font-semibold text-xl">Total</h1>
+                        <div>
+                            <div className="h-2 bg-slate-300 rounded-full">
+                                <div className="h-2 bg-slate-800 rounded-full" style={{ width: `${(totalCorrect / totalPairs) * 100}%` }}></div>
+                            </div>
+                            <h1>{totalCorrect} / {totalPairs}</h1>
+                        </div>
+                    </div>
+                    <div className="flex flex-col">
+                        <h1 className="font-semibold text-xl">Difficulty</h1>
+                        <div className="flex items-center gap-1">
+                            <DifficultyButton onClick={handleDifficultyChange} difficultyLevel={3}
+                                              difficulty={difficulty}>Easy</DifficultyButton>
+                            <DifficultyButton onClick={handleDifficultyChange} difficultyLevel={6}
+                                              difficulty={difficulty}>Medium</DifficultyButton>
+                            <DifficultyButton onClick={handleDifficultyChange} difficultyLevel={9}
+                                              difficulty={difficulty}>Hard</DifficultyButton>
+                            <ResetButton onClick={handleGameReset}/>
+                        </div>
+                    </div>
+                </div>
+                <div className="w-full grid grid-cols-3 place-items-center gap-8 p-8">
+                    {tilesArray}
+                </div>
             </section>
         </main>
     )

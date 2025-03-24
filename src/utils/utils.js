@@ -1,13 +1,13 @@
 export const colorsArray = [
-    'bg-red-500',
-    'bg-orange-500',
-    'bg-yellow-500',
-    'bg-green-500',
-    'bg-blue-500',
-    'bg-purple-500',
-    'bg-pink-500',
-    'bg-rose-500',
-    'bg-slate-500',
+    'bg-red-300',
+    'bg-orange-300',
+    'bg-yellow-200',
+    'bg-green-300',
+    'bg-blue-300',
+    'bg-purple-300',
+    'bg-pink-300',
+    'bg-rose-300',
+    'bg-slate-300',
 ]
 
 export const duplicateArray = (array) => [...array, ...array]
