@@ -1,12 +1,14 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Tile from "./components/Tile.jsx";
 import DifficultyButton from "./components/DifficultyButton.jsx"
 import ResetButton from "./components/ResetButton.jsx";
-import {colorsArray, duplicateArray, shuffleArray, generateRandomId} from "./utils/utils.js";
+import WinModal from "./components/WinModal.jsx";
+import { colorsArray, duplicateArray, shuffleArray, generateRandomId } from "./utils/utils.js";
 import Confetti from 'react-confetti'
 import { useWindowSize } from "react-use";
 
 function App() {
+    const modalRef = useRef(null)
     const [tiles, setTiles] = useState([])
     const [difficulty, setDifficulty] = useState(3);
     const {height, width} = useWindowSize()
@@ -30,6 +32,14 @@ function App() {
     const isGameWon = tiles.every(tile => tile.isCorrect === true)
     const totalCorrect = tiles.filter(tile => tile.isCorrect === true).length / 2
     const totalPairs = tiles.length / 2
+
+    if(isGameWon) {
+        if(modalRef.current) modalRef.current.showModal()
+    }
+
+    const handleClose = () => {
+        if(modalRef.current) modalRef.current.close()
+    }
 
     const handleTileMatch = ([firstTile, secondTile]) => {
         const isMatch = firstTile.color === secondTile.color
@@ -91,22 +101,23 @@ function App() {
     })
 
     return (
-        <main className="w-full flex justify-center py-8 font-sans">
+        <main className="w-full flex justify-center py-8 font-sans ">
             <section className="w-full max-w-3xl flex flex-col justify-center items-center gap-6">
                 {isGameWon && <Confetti width={width} height={height}/>}
-                <div className="w-full flex justify-between px-8 py-4 shadow-xl rounded-2xl gap-4">
-                    <div className="flex flex-col flex-grow max-w-xs">
+                <WinModal ref={modalRef} handleClose={handleClose}/>
+                <div className="w-11/12 flex flex-col sm:flex-row justify-between px-8 py-4 shadow-xl rounded-2xl gap-4">
+                    <div className="flex flex-col flex-grow sm:max-w-xs">
                         <h1 className="font-semibold text-xl">Total</h1>
                         <div>
                             <div className="h-2 bg-slate-300 rounded-full">
-                                <div className="h-2 bg-slate-800 rounded-full" style={{ width: `${(totalCorrect / totalPairs) * 100}%` }}></div>
+                                <div className="h-2 bg-black rounded-full" style={{ width: `${(totalCorrect / totalPairs) * 100}%` }}></div>
                             </div>
                             <h1>{totalCorrect} / {totalPairs}</h1>
                         </div>
                     </div>
                     <div className="flex flex-col">
                         <h1 className="font-semibold text-xl">Difficulty</h1>
-                        <div className="flex items-center gap-1">
+                        <div className="flex items-center w-full gap-1">
                             <DifficultyButton onClick={handleDifficultyChange} difficultyLevel={3}
                                               difficulty={difficulty}>Easy</DifficultyButton>
                             <DifficultyButton onClick={handleDifficultyChange} difficultyLevel={6}
@@ -117,7 +128,7 @@ function App() {
                         </div>
                     </div>
                 </div>
-                <div className="w-full grid grid-cols-3 place-items-center gap-8 p-8">
+                <div className="w-11/12 grid grid-cols-3 place-items-center gap-2 sm:gap-8 p-8">
                     {tilesArray}
                 </div>
             </section>

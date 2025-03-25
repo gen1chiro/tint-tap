@@ -3,7 +3,7 @@ const DifficultyButton = ({onClick, difficultyLevel, difficulty, children}) => {
 
     return (
         <button onClick={() => onClick(difficultyLevel)} disabled={isDisabled}
-                className={`border-2 px-4 py-1 rounded ${isDisabled ? 'bg-gray-600' : 'bg-black'} font-medium rounded-full text-white hover:bg-gray-600 hover:cursor-pointer transition-colors ease-out`}>
+                className={`px-4 py-1 rounded ${isDisabled ? 'bg-gray-400' : 'bg-black'} font-semibold text-white rounded-full hover:bg-gray-400 hover:cursor-pointer transition-colors ease-out`}>
             {children}
         </button>
     )
