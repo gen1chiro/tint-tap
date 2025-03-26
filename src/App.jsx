@@ -10,7 +10,8 @@ import { useWindowSize } from "react-use";
 function App() {
     const modalRef = useRef(null)
     const [tiles, setTiles] = useState([])
-    const [difficulty, setDifficulty] = useState(3);
+    const [difficulty, setDifficulty] = useState(3)
+    const [isHandlingMatch, setIsHandlingMatch] = useState(false)
     const {height, width} = useWindowSize()
 
     const generateTiles = (diff) => {
@@ -56,6 +57,7 @@ function App() {
                             isFlipped: false
                         }
                     }
+                    setIsHandlingMatch(false)
                     return prevTile
                 })
             })
@@ -64,6 +66,7 @@ function App() {
 
     const handleClick = (id, isFlipped, isCorrect) => {
         if (isFlipped || isCorrect) return
+        if (isHandlingMatch) return
 
         setTiles(prevTiles => {
             const newTiles = prevTiles.map(prevTile => {
@@ -75,7 +78,10 @@ function App() {
 
             const flippedCards = newTiles.filter(tile => tile.isFlipped && !tile.isCorrect)
 
-            if (flippedCards.length === 2) handleTileMatch(flippedCards)
+            if (flippedCards.length === 2) {
+                setIsHandlingMatch(true)
+                handleTileMatch(flippedCards)
+            }
 
             return newTiles
         })
