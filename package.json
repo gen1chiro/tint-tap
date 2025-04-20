@@ -11,9 +11,9 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.12",
-    "react": "^19.2.0-canary-bc6184dd-20250417",
+    "react": "^19.0.0",
     "react-confetti": "^6.4.0",
-    "react-dom": "^19.2.0-canary-bc6184dd-20250417",
+    "react-dom": "^19.0.0",
     "react-use": "^17.6.0",
     "tailwindcss": "^4.0.12"
   },
