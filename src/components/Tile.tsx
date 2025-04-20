@@ -1,4 +1,12 @@
-const Tile = ({id, color, isFlipped, isCorrect, handleClick}) => {
+interface TileProps {
+    id: string
+    color: string
+    isFlipped: boolean
+    isCorrect: boolean
+    handleClick: (id: string, isFlipped: boolean, isCorrect: boolean) => void
+}
+
+const Tile = ({id, color, isFlipped, isCorrect, handleClick}: TileProps) => {
     return (
         <div
             className={`w-full aspect-square border-1 border-gray-400 rounded-full ${isFlipped ? color : 'bg-white'} 

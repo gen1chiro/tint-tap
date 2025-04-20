@@ -1,4 +1,8 @@
-const ResetButton = ({onClick}) => {
+interface ResetButtonProps {
+    onClick: () => void
+}
+
+const ResetButton = ({onClick}: ResetButtonProps) => {
     return (
         <button onClick={onClick} className="aspect-square w-8 bg-black hover:bg-gray-400 rounded-full flex justify-center items-center">
             <svg className="fill-white" width="18px" height="18px" viewBox="0 0 1920 1920" xmlns="http://www.w3.org/2000/svg">

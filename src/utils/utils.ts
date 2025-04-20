@@ -10,9 +10,9 @@ export const colorsArray = [
     'bg-slate-300',
 ]
 
-export const duplicateArray = (array) => [...array, ...array]
+export const duplicateArray = <T>(array: T[]): T[] => [...array, ...array]
 
-export const shuffleArray = (array) => {
+export const shuffleArray = <T>(array: T[]): T[] => {
     const shuffled = [...array];
     for (let i = shuffled.length - 1; i > 0; i--) {
         const randomIndex = Math.floor(Math.random() * (i + 1));

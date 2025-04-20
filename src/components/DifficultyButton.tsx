@@ -1,4 +1,13 @@
-const DifficultyButton = ({onClick, difficultyLevel, difficulty, children}) => {
+import { ReactNode } from 'react';
+
+interface DifficultyButtonProps {
+    onClick: (difficultyLevel: number) => void
+    difficultyLevel: number
+    difficulty: number
+    children: ReactNode
+}
+
+const DifficultyButton = ({onClick, difficultyLevel, difficulty, children}: DifficultyButtonProps) => {
     const isDisabled = difficulty === difficultyLevel
 
     return (

@@ -1,20 +1,27 @@
 import { useEffect, useState, useRef } from 'react'
-import Tile from "./components/Tile.jsx";
-import DifficultyButton from "./components/DifficultyButton.jsx"
-import ResetButton from "./components/ResetButton.jsx";
-import WinModal from "./components/WinModal.jsx";
-import { colorsArray, duplicateArray, shuffleArray, generateRandomId } from "./utils/utils.js";
+import Tile from "./components/Tile.tsx";
+import DifficultyButton from "./components/DifficultyButton.tsx"
+import ResetButton from "./components/ResetButton.tsx";
+import WinModal from "./components/WinModal.tsx";
+import { colorsArray, duplicateArray, shuffleArray, generateRandomId } from "./utils/utils.ts";
 import Confetti from 'react-confetti'
 import { useWindowSize } from "react-use";
 
+type Tile = {
+    id: string
+    color: string
+    isFlipped: boolean
+    isCorrect: boolean
+}
+
 function App() {
-    const modalRef = useRef(null)
-    const [tiles, setTiles] = useState([])
+    const modalRef = useRef<HTMLDialogElement | null>(null)
+    const [tiles, setTiles] = useState<Tile[]>([])
     const [difficulty, setDifficulty] = useState(3)
     const [isHandlingMatch, setIsHandlingMatch] = useState(false)
     const {height, width} = useWindowSize()
 
-    const generateTiles = (diff) => {
+    const generateTiles = (diff: number): Tile[] => {
         const shuffledColorsArr = shuffleArray(duplicateArray(colorsArray.slice(0, diff)))
         return shuffledColorsArr.map(color => {
             return {
@@ -30,19 +37,19 @@ function App() {
         setTiles(generateTiles(difficulty))
     }, [difficulty])
 
-    const isGameWon = tiles.every(tile => tile.isCorrect === true)
-    const totalCorrect = tiles.filter(tile => tile.isCorrect === true).length / 2
+    const isGameWon = tiles.every(tile => tile.isCorrect)
+    const totalCorrect = tiles.filter(tile => tile.isCorrect).length / 2
     const totalPairs = tiles.length / 2
 
     if(isGameWon) {
-        if(modalRef.current) modalRef.current.showModal()
+        if (modalRef.current) modalRef.current?.showModal()
     }
 
     const handleClose = () => {
-        if(modalRef.current) modalRef.current.close()
+        if (modalRef.current) modalRef.current?.close()
     }
 
-    const handleTileMatch = ([firstTile, secondTile]) => {
+    const handleTileMatch = ([firstTile, secondTile]: Tile[]) => {
         const isMatch = firstTile.color === secondTile.color
 
         setTimeout(() => {
@@ -64,19 +71,19 @@ function App() {
         }, 1000)
     }
 
-    const handleClick = (id, isFlipped, isCorrect) => {
+    const handleClick = (id: string, isFlipped: boolean, isCorrect: boolean) => {
         if (isFlipped || isCorrect) return
         if (isHandlingMatch) return
 
         setTiles(prevTiles => {
-            const newTiles = prevTiles.map(prevTile => {
+            const newTiles: Tile[] = prevTiles.map(prevTile => {
                 return prevTile.id === id ? {
                     ...prevTile,
                     isFlipped: !prevTile.isFlipped
                 } : prevTile
             })
 
-            const flippedCards = newTiles.filter(tile => tile.isFlipped && !tile.isCorrect)
+            const flippedCards: Tile[] = newTiles.filter(tile => tile.isFlipped && !tile.isCorrect)
 
             if (flippedCards.length === 2) {
                 setIsHandlingMatch(true)
@@ -87,7 +94,7 @@ function App() {
         })
     }
 
-    const handleDifficultyChange = (change) => {
+    const handleDifficultyChange = (change: number) => {
         setDifficulty(change)
     }
 
@@ -110,7 +117,7 @@ function App() {
         <main className="w-full flex justify-center py-8 font-sans ">
             <section className="w-full max-w-3xl flex flex-col justify-center items-center gap-6">
                 {isGameWon && <Confetti width={width} height={height}/>}
-                <WinModal ref={modalRef} handleClose={handleClose}/>
+                <WinModal modalRef={modalRef} handleClose={handleClose}/>
                 <div className="w-11/12 flex flex-col sm:flex-row justify-between px-8 py-4 shadow-xl rounded-2xl gap-4">
                     <div className="flex flex-col flex-grow sm:max-w-xs">
                         <h1 className="font-semibold text-xl">Total</h1>
